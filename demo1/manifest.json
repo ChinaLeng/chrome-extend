@@ -1,0 +1,29 @@
+{
+    "name": "demo1",
+    "description": "demo1",
+    "version": "0.01",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon":"img/icon.png"
+    },
+    "icons":{
+        "16": "img/icon.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "storage",
+        "contextMenus"
+    ],
+      "content_scripts": [
+        {
+            "css": [
+                "main.css"
+            ],
+            "matches": ["<all_urls>"],
+            "run_at": "document_start" 
+        }
+      ]
+}
