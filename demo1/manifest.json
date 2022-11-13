@@ -15,15 +15,22 @@
     },
     "permissions": [
         "storage",
-        "contextMenus"
+        "tabs"
     ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+      ],
       "content_scripts": [
         {
             "css": [
                 "main.css"
             ],
+            "js":[
+                "content.js"
+            ],
             "matches": ["<all_urls>"],
-            "run_at": "document_start" 
+            "run_at": "document_idle" 
         }
       ]
 }
