@@ -1,49 +1,48 @@
-html, body {
-    margin: 0;
-    padding: 0;
-  }
-  
-  #app {
-    width: 200px;
-    font-size: 16px;
-    padding: 10px;
-  }
-  
-  .label {
-    height: 40px;
-    line-height: 40px;
-  }
-  
-  input[type=checkbox] {
-    display: none;
-  }
-  
-  input[type=checkbox]+label {
-   position: relative;
-   padding-left: 30px;
-  }
-  
-  input[type=checkbox]+label:before {
-    font-family: FontAwesome;
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-47%);
-  }
-  
-  input[type=checkbox]+label:before {
-    content: "\f096";
-  }
-  
-  input[type=checkbox]+label:before {
-    letter-spacing: 10px;
-  }
-  
-  input[type=checkbox]:checked+label:before {
-    content: "\f046";
-  }
-  
-  input[type=checkbox]:checked+label:before {
-    letter-spacing: 5px;
-  }
+body {
+  width: 50vw;
+  height: 50vh;
+  background-color: rgb(75, 75, 220);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Switch开关样式 */
+input[type="checkbox"].switch {
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 10px;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+input[type="checkbox"].switch::after {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0, 0, 2px, #999;
+  transition: 0.4s;
+  top: 2px;
+  position: absolute;
+  left: 2px;
+}
+
+input[type="checkbox"].switch:checked {
+  background: rgb(19, 206, 102);
+}
+
+/* 当input[type=checkbox]被选中时：伪元素显示下面样式 位置发生变化 */
+input[type="checkbox"].switch:checked::after {
+  content: "";
+  position: absolute;
+  left: 55%;
+  top: 2px;
+}

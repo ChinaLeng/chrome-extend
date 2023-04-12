@@ -1,36 +1,38 @@
 {
-    "name": "demo1",
-    "description": "demo1",
-    "version": "0.01",
     "manifest_version": 3,
-    "action": {
-        "default_popup": "popup.html",
-        "default_icon":"img/icon.png"
-    },
-    "icons":{
-        "16": "img/icon.png"
-    },
+    "name": "My Notes",
+    "version": "1.0",
+    "description": "A simple note-taking extension for Chrome",
     "background": {
-        "service_worker": "background.js"
+      "service_worker": "background.js"
     },
+    "icons": {
+        "16": "img/icon.png"
+      },
     "permissions": [
+      "contextMenus",
+        "activeTab",
+        "tabs",
         "storage",
-        "tabs"
+        "unlimitedStorage",
+        "browsingData",
+        "notifications",
+        "pageCapture",
+        "nativeMessaging"
     ],
     "host_permissions": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "content_scripts": [
-        {
-            "css": [
-                "main.css"
-            ],
-            "js":[
-                "content.js"
-            ],
-            "matches": ["<all_urls>"],
-            "run_at": "document_idle" 
-        }
-      ]
-}
+      "<all_urls>"
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "js": ["content_script.js","jq-3.1.min.js"],
+        "matches":["<all_urls>"],
+        "css": ["custom.css"],
+        "run_at": "document_end"
+      }
+    ]
+  }
+  
