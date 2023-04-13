@@ -16,7 +16,6 @@ function sendMessageToContentScript(message, callback) {
 }
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-  /* Check which context-menu was triggered */
   if (info.menuItemId === 'myMenu') {
       sendMessageToContentScript({cmd:'prepare capture'});
   }
