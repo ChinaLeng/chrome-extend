@@ -17,6 +17,8 @@ let arrangements = [],
     yPos,
     xPos,
     numArrangements;
+
+let screenshot = {};
 //隐藏掉滚动条
 function forbiddenOverflow(){
     document.documentElement.style.overflow = 'hidden';
@@ -66,7 +68,7 @@ function initScroll(){
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log(request);
     if(request.cmd == 'prepare capture'){
-        self.forbiddenOverflow();
+        // self.forbiddenOverflow();
         self.initFull();
         self.initScreen();
         self.initScroll();
@@ -77,28 +79,99 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 function getPositions(){
- scrollPad = screenHeight;
- yDelta = screenHeight - (screenHeight > scrollPad ? scrollPad : 0);
- xDelta = screenWidth;
- yPos = fullHeight - screenHeight;
- console.log("screenHeight",screenHeight);
- console.log("scrollPad",scrollPad);
- console.log("yPos1",yPos);
- console.log("yDelta1",yDelta);
- console.log("xDelta1",xDelta);
-    while (yPos > -yDelta) {// 如果没有滚动到最后，就一直执行
-        xPos = 0;
-        while (xPos < fullWidth) {// 横向滚动页面的位置信息
-            arrangements.push([xPos, yPos]);// 页面片段的位置信息
-            xPos += xDelta;
+    window.scrollTo(0,0);
+    //根据可视区域计算整个网页可以拆分成多少行多少列
+    let columns = Math.ceil(fullWidth*1.0 /  screenWidth);
+    let rows = Math.ceil(fullHeight*1.0 /  screenHeight);
+    for(var r=0; r<rows; r++) {
+        document.body.scrollHeight = r*fullHeight;
+        for(var c=0; c<columns; c++) {
+          document.body.scrollLeft = c*fullWidth;
+          window.scrollTo(r*fullHeight,(r+1)*fullHeight);
+          chrome.runtime.sendMessage({msg: 'capturePage'},(response) => {
+            if(response.url != undefined && response.url != 'undefined'){
+                arrangements.push([response.url]);
+            }
+          });
         }
-        yPos -= yDelta; // 页面竖向位置信息
     }
-    numArrangements = arrangements.length;
-    console.log(arrangements);
-    console.log("yPos2",yPos);
-    console.log("yDelta2",yDelta);
-    console.log("xDelta2",xDelta);
+    console.log("list",arrangements);
+    console.log("0",arrangements[0]);
+    mergeImgs(arrangements).then(base64 => {
+    });
+//  scrollPad = screenHeight;
+//  yDelta = screenHeight - (screenHeight > scrollPad ? scrollPad : 0);
+//  xDelta = screenWidth;
+//  yPos = fullHeight - screenHeight;
+//     while (yPos > -yDelta) {// 如果没有滚动到最后，就一直执行
+//         xPos = 0;
+//         while (xPos < fullWidth) {// 横向滚动页面的位置信息
+//             arrangements.push([xPos, yPos]);// 页面片段的位置信息
+//             xPos += xDelta;
+//         }
+//         yPos -= yDelta; // 页面竖向位置信息
+//     }
+//     numArrangements = arrangements.length;
+//     var next = arrangements.shift(),
+//     x = next[0], y = next[1];
+//     window.scrollTo(x, y);
+
+//     canvas = document.createElement('canvas');
+//     canvas.width = fullWidth;
+//     canvas.height = fullHeight;
+//     screenshot.canvas = canvas;
+//     screenshot.ctx = canvas.getContext('2d');
+
+//     var data = {
+//         msg: 'capturePage',
+//         x: window.scrollX,
+//         y: window.scrollY,
+//         complete: (numArrangements-arrangements.length)/numArrangements,
+//         totalWidth: fullWidth,
+//         totalHeight: fullHeight,
+//         screenshot:screenshot
+//     };
+//     console.log("data",data);
+//     setTimeout(() => {
+//         // 将滚动后获取的网页的可视位置坐标数据发送消息给popup.js
+//         chrome.runtime.sendMessage(data);
+//     }, 550)
+}
+
+function mergeImgs(arrangements){
+    // const imgDom = document.createElement('img');
+	// imgDom.src = base64;
+    // list.map((item, index) => {
+    //     const img = new Image();
+    //     img.src = item;
+    // })
+    return new Promise((resolve, reject) => {
+        const baseList = [];
+        const canvas = document.createElement('canvas');
+        canvas.width = fullWidth;
+        canvas.height = fullHeight;
+
+        arrangements.map((item, index) => {
+            console.log("item",item);
+            const img = new Image();
+            // 跨域
+            //img.crossOrigin = 'Anonymous';
+            img.onload = () => {
+                canvas.getContext('2d').drawImage(img, 0, 0,0,0);
+                // const base64 = canvas.toDataURL('image/png');
+                // baseList.push(base64);
+
+                // if (baseList[list.length - 1]) {
+                //     // 返回新的图片
+                //     resolve(baseList[list.length - 1])
+                // }
+            }
+            img.src = item;
+        });
+        var combinedImage = canvas.toDataURL();
+        console.log("combinedImage",combinedImage);
+        resolve(combinedImage);
+    })
 }
 
 
