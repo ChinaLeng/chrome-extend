@@ -1,0 +1,23 @@
+{
+    "name": "一键生成网页截图",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "description": "将当前浏览的网页一键保存为图片",
+    "action": {
+      "default_icon": "img/icon-16.png",
+      "default_popup": "popup.html"
+    },
+    "permissions": [ "tabs", "activeTab", "scripting", "storage", "unlimitedStorage" ],
+    "icons": {
+      "16": "img/icon-16.png",
+      "48": "img/icon-48.png",
+      "128": "img/icon-128.png"
+    },
+    "content_scripts": [
+      {
+        "js": ["page.js"],
+        "matches":["<all_urls>"],
+        "run_at": "document_end"
+      }
+    ]
+  }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset=utf-8>
+      <title>ScreenCapture - liujinkai.com</title>
+      <!-- 当前页面样式... -->
+      <style>
+        .chrome-web-screenshot-operate-main-body{
+            display: -webkit-flex;
+            display: flex;
+            width: 400px;
+            height: 280px;
+            background-color: #fff;
+        }
+        .chrome-web-screenshot-operate-subclass{
+            background-color: #F5F5F5;
+            width: 100px;
+            height: 100px;
+            margin: 5px 15px;
+            border-radius: 10%;
+        }
+        .entire-icon{
+            margin: 10px auto;
+            width: 45px;
+            height: 32px;
+            background-image:url('img/entire-web.png') ;
+        }
+        .visual-icon{
+            margin: 10px auto;
+            width: 33px;
+            height: 32px;
+            background-image:url('img/visual-web.png') ;
+        }
+        .custom-icon{
+            margin: 10px auto;
+            width: 35px;
+            height: 32px;
+            background-image:url('img/custom-web.png');
+        }
+      </style>
+  </head>
+  <body>
+      <div class="chrome-web-screenshot-operate-main-body">
+        <div class="chrome-web-screenshot-operate-subclass">
+            <div class="entire-icon"></div>
+            <div id="entire-web">截取整个网页</div>
+        </div>
+        <div class="chrome-web-screenshot-operate-subclass">
+            <div class="visual-icon"></div>
+            <div id="visual-web">截取可视网页</div>
+        </div>
+        <div class="chrome-web-screenshot-operate-subclass">
+            <div class="custom-icon"></div>
+            <div id="custom-web">自定义截取</div>
+        </div>
+      </div>
+      <script src="popup.js"></script>
+  </body>
+</html>
