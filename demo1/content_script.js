@@ -78,27 +78,92 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     sendResponse();
 });
 
-function getPositions(){
+function aaa(x,y){
+    return new Promise((resolve, reject) => {
+        window.scrollTo(x, y);
+        resolve(true)
+    })
+}
+
+async function bbbb(x,y){
+            window.scrollTo(x, y);
+            //window.innerWidth = 100;
+            //window.innerHeight = 100;
+            await new Promise(resolve => setTimeout(resolve, 4000));
+            chrome.runtime.sendMessage({msg: 'capturePage'},(response) => {
+                if(response.url != undefined && response.url != 'undefined'){
+                    console.log("url",response.url);
+
+                    let image = new Image();
+
+                    // 加载截图
+                    image.src = response.url;
+
+                    // 等待图像加载完成
+                    image.onload = function() {
+                    // 创建一个 canvas 元素
+                    let canvas = document.createElement('canvas');
+
+                    // 设置 canvas 尺寸
+                    canvas.width = 300;
+                    canvas.height = 500;
+
+                    // 将截图裁剪为所选区域
+                    let context = canvas.getContext('2d');
+                    context.drawImage(image, x, y, 300, 500, 0, 0, 300, 500);
+console.log("canvas",canvas.toDataURL("image/png"))
+
+                                }
+            }
+            });
+}
+
+async function getPositions(){
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const scrollHeight = Math.ceil(fullHeight / 10);
+
     window.scrollTo(0,0);
     //根据可视区域计算整个网页可以拆分成多少行多少列
     let columns = Math.ceil(fullWidth*1.0 /  screenWidth);
     let rows = Math.ceil(fullHeight*1.0 /  screenHeight);
-    for(var r=0; r<rows; r++) {
-        document.body.scrollHeight = r*fullHeight;
-        for(var c=0; c<columns; c++) {
-          document.body.scrollLeft = c*fullWidth;
-          window.scrollTo(r*fullHeight,(r+1)*fullHeight);
-          chrome.runtime.sendMessage({msg: 'capturePage'},(response) => {
-            if(response.url != undefined && response.url != 'undefined'){
-                arrangements.push([response.url]);
-            }
-          });
+    let r = 0;
+    let lastH = fullHeight - screenHeight;
+    // chrome.runtime.sendMessage({});
+    while(r < rows){
+        let c = 0;
+        while(c < columns){
+            console.log("r*screenHeight",r*screenHeight);
+            console.log("c*screenWidth",c*screenWidth);
+            // await this.aaa(c*screenWidth,r*screenHeight);
+            await this.bbbb(c*screenWidth,r*screenHeight);
+            // console.log("y",window.scrollY);
+            // window.scrollTo(r*fullHeight,(r+1)*fullHeight);
+            // arrangements.push([c*screenWidth, r*screenHeight]);
+            // window.scrollTo(0,r*screenHeight);
+            // chrome.runtime.sendMessage({msg: 'capturePage'},(response) => {
+            //     if(response.url != undefined && response.url != 'undefined'){
+            //         // console.log(response.url);
+            //         arrangements.push(response.url);
+            //     }
+            // });
+            c++;
         }
+        r++;
     }
-    console.log("list",arrangements);
-    console.log("0",arrangements[0]);
-    mergeImgs(arrangements).then(base64 => {
-    });
+    // for(var r=0; r<rows; r++) {
+    //     document.body.scrollHeight = r*fullHeight;
+    //     for(var c=0; c<columns; c++) {
+    //       document.body.scrollLeft = c*fullWidth;
+    //       window.scrollTo(r*fullHeight,(r+1)*fullHeight);
+    //       chrome.runtime.sendMessage({msg: 'capturePage'},(response) => {
+    //         if(response.url != undefined && response.url != 'undefined'){
+    //             arrangements.push(response.url);
+    //         }
+    //       });
+    //     }
+    // }
+
+
 //  scrollPad = screenHeight;
 //  yDelta = screenHeight - (screenHeight > scrollPad ? scrollPad : 0);
 //  xDelta = screenWidth;
@@ -137,8 +202,13 @@ function getPositions(){
 //         chrome.runtime.sendMessage(data);
 //     }, 550)
 }
-
+// mergeImgs(arrangements).then(base64 => {
+//     console.log("list",arrangements);
+//     console.log("0",arrangements[0]);
+// });
 function mergeImgs(arrangements){
+    console.log("list",arrangements);
+    console.log("0",arrangements[0]);
     // const imgDom = document.createElement('img');
 	// imgDom.src = base64;
     // list.map((item, index) => {

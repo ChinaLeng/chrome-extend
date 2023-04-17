@@ -4,7 +4,6 @@
     title: "文字识别",
     contexts: ['all'],
   })
-
 function sendMessageToContentScript(message, callback) {
   chrome.tabs.query({active: true,currentWindow: true}, (tabs) => {
     console.log(tabs)
@@ -21,13 +20,33 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
   }
 });
 
+
+
 chrome.runtime.onMessage.addListener(function(request, sender,sendResponse) {
+  // self.captureFullPage();
+
+
+  // console.log("request",request);
+  // let arrangements = request.arrangements;
+  // arrangements.map((item, index) => {
+  //   let x = item[0]; let y = item[1];
+  //   window.scrollTo(x, y);
+  //   chrome.tabs.captureVisibleTab(null, {format:'png'}, function(screenshotUrl) {
+  //   console.log("screenshotUrl",screenshotUrl);
+  //   sendResponse({cmd:'img capture',url:screenshotUrl});
+  // });
+  // })
+  // chrome.tabs.captureVisibleTab(null, {format:'png'}, function(screenshotUrl) {
+  //   console.log("screenshotUrl",screenshotUrl);
+  //   sendResponse({cmd:'img capture',url:screenshotUrl});
+  // });
   // capturePage(request,sender).then(temp => {
   //   console.log("temp",temp);
   //   sendResponse(temp);
   // });
   // return true;
-  chrome.tabs.captureVisibleTab(null, {format:'png'}, function(screenshotUrl) {
+
+  chrome.tabs.captureVisibleTab(null, {format:'png',quality: 100}, function(screenshotUrl) {
     console.log("screenshotUrl",screenshotUrl);
     sendResponse({cmd:'img capture',url:screenshotUrl});
   });
