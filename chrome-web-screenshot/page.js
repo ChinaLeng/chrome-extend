@@ -18,13 +18,12 @@ let arrangements = [];
         if (request.msg === 'scrollPage') {
             initScroll();
             initInner();
-            callback();
             geyCountCoordinate();
             getScreenshot();
         }else{
             getScreenshot();
         }
-        
+        callback();
         return true;
     });
 
@@ -50,6 +49,8 @@ function overflowHidden(){
 }
 
 function geyCountCoordinate(){
+    window.scrollTo(0,0);
+    new Promise(resolve => setTimeout(resolve, 1000));
     //剩余需要滚动的高度 
     let residueY = scrollHeight - innerHeight;
     let residueX;
@@ -64,6 +65,7 @@ function geyCountCoordinate(){
         //减去滚动的高度
         residueY -= innerHeight;
     }
+    arrangements.reverse();
     console.log("arrangements",arrangements);
 }
 
@@ -75,12 +77,13 @@ function getScreenshot(){
     
     let next = arrangements.shift();
     let x = next[0], y = next[1];
+    console.log("x",x);
+    console.log("y",y);
     window.scrollTo(x, y);
-
     let data = {
         msg: 'capturePage',
-        x: window.scrollX,
-        y: window.scrollY,
+        x: x,
+        y: y,
         complete: 3,
         totalWidth: scrollWidth,
         totalHeight: scrollHeight,

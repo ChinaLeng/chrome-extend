@@ -1,7 +1,6 @@
 window.onload=function(){
     document.getElementById("entire-web").addEventListener("click", function () {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            console.log("tabs",tabs);
             var image = new Image();
             sendScrollMessage(tabs[0]);
         })
@@ -24,18 +23,19 @@ function sendScrollMessage1(tab) {
 }
 
 chrome.runtime.onMessage.addListener(async function(request, sender) {
-    console.log("request",request);
     if (request.msg === 'capturePage') {
         await capturePage(request,sender);
     }else{
-
+        endPage();
     }
     
 });
+var screenshot = {};
 async function capturePage(data, sender, sendResponse) {
     return new Promise((resolve, reject) => {
-    var screenshot = {};
-    var canvas;
+    let canvas;
+    console.log("totalWidth",data.totalWidth);
+    console.log("totalHeight",data.totalHeight);
     if (!screenshot.canvas) {
         canvas = document.createElement('canvas');
         canvas.width = data.totalWidth;
@@ -44,15 +44,16 @@ async function capturePage(data, sender, sendResponse) {
         screenshot.ctx = canvas.getContext('2d');
     }
 
+    console.log("data.x",data.x);
+    console.log("data.y",data.y);
     chrome.tabs.captureVisibleTab(
         null, {format: 'png', quality: 100}, function(dataURI) {
-            console.log("dataURI",dataURI);
             if (dataURI) {
-                var image = new Image();
+                let image = new Image();
                 image.onload = function() {
-                    console.log('draw img postions: ' + data.x + ', ' + data.y);
-                    screenshot.ctx.drawImage(image, data.x, data.y);// 将当前片段图片放到相应位置
-                    chrome.tabs.query({ active: true, lastFocusedWindow: true }, function(tabs) {
+                    //把截图的图片 根据滚动的像素 放到指定位置
+                    screenshot.ctx.drawImage(image, data.x, data.y);
+                    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
                         let tab = tabs[0]
                         sendScrollMessage1(tab);
                         resolve(); 
@@ -62,7 +63,10 @@ async function capturePage(data, sender, sendResponse) {
             }
         });
 
-        console.log("screenshot.canvas",screenshot.canvas);
     });
 }
 
+function endPage(){
+    let dataURI = screenshot.canvas.toDataURL();
+    console.log("dataURI",dataURI);
+}
