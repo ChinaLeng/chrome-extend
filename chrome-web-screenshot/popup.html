@@ -15,7 +15,7 @@
         .chrome-web-screenshot-operate-subclass{
             background-color: #F5F5F5;
             width: 100px;
-            height: 100px;
+            height: 85px;
             margin: 5px 15px;
             border-radius: 10%;
         }
@@ -37,21 +37,26 @@
             height: 32px;
             background-image:url('img/custom-web.png');
         }
+        .text{
+            color: #4F4F4F;
+            text-align: center;
+            font-size: 14px;
+        }
       </style>
   </head>
   <body>
       <div class="chrome-web-screenshot-operate-main-body">
         <div class="chrome-web-screenshot-operate-subclass">
             <div class="entire-icon"></div>
-            <div id="entire-web">截取整个网页</div>
+            <div class="text" id="entire-web">截取整个网页</div>
         </div>
         <div class="chrome-web-screenshot-operate-subclass">
             <div class="visual-icon"></div>
-            <div id="visual-web">截取可视网页</div>
+            <div class="text" id="visual-web">截取可视网页</div>
         </div>
         <div class="chrome-web-screenshot-operate-subclass">
             <div class="custom-icon"></div>
-            <div id="custom-web">自定义截取</div>
+            <div class="text" id="custom-web">自定义截取</div>
         </div>
       </div>
       <script src="popup.js"></script>
