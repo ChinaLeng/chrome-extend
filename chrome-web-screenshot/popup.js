@@ -15,7 +15,7 @@ window.onload=function(){
     document.getElementById("custom-web").addEventListener("click", function () {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             screenshot = {}
-            sendScrollMessage(tabs[0],{msg: 'customPage'});
+            sendScrollMessage(tabs[0],{msg: 'customPage',custom:true});
         })
     })
 }
