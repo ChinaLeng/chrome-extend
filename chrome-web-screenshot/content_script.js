@@ -39,7 +39,6 @@ let mask;
             initialization();
             overflowHidden();
             initScroll();
-            //createHtml();
             getCustomScreenshot();
             
         }
@@ -137,24 +136,6 @@ function getCustomScreenshot(){
     mask.addEventListener('mousedown', getMousedown,false);
 }
 
-function createHtml(){
-    // mask = document.createElement('div');
-    // mask.style.position = 'absolute';
-    // mask.style.left = 0;
-    // mask.style.top = 0;
-    // mask.style.width = scrollWidth+'px';
-    // mask.style.height = scrollHeight+'px';
-    // mask.style.background = 'rgba(0, 0, 0, 0.3)';
-    // mask.style.zIndex = 9999;
-    // document.body.append(mask); 
-
-    const page = 
-        "<div class='chrome-extension-capture-gif-section'>" +
-            "<div class='chrome-extension-capture-gif-guide'>" +
-                "单击并拖动选择区域" +
-            "</div>" +
-        "</div>";
-}
 
 function getMousedown(e){
         //鼠标起始位置
@@ -163,15 +144,11 @@ function getMousedown(e){
         let endX,endY;
         startX = e.clientX,
         startY = e.clientY;
-        // 创建遮罩层
-        
 
         mask.addEventListener('mousemove', (e1) => {
             
             endX = e1.clientX,
             endY = e1.clientY;
-            box.style.width = Math.abs(startX - endX) + 'px';
-            box.style.height = Math.abs(startY - endY) + 'px';
         });
         mask.addEventListener('mouseup', (e) => {
             box.classList.remove('selecting'); 

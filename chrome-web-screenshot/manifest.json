@@ -7,7 +7,7 @@
       "default_icon": "img/icon-16.png",
       "default_popup": "popup.html"
     },
-    "permissions": [ "activeTab","tabs","storage","scripting"],
+    "permissions": [ "activeTab","tabs","storage","scripting","unlimitedStorage"],
     "icons": {
       "16": "img/icon-16.png",
       "48": "img/icon-48.png",
