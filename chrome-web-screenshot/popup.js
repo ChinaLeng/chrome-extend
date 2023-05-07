@@ -106,13 +106,14 @@ function createCanvas(data){
 //截图结束后  打开新的标签页  查看或者编辑图片
 function endPage(){
     let dataURI = screenshot.canvas.toDataURL();
-    console.log("canvas.toDataURL",dataURI);
+    let canvaswidth = screenshot.canvas.width;
+    let canvasheight = screenshot.canvas.height;
     //删除前一次存储的图片
-    chrome.storage.local.remove(['croppingimg'], function(obj){
+    chrome.storage.local.remove(['croppingimg','canvaswidth','canvasheight'], function(obj){
         console.log("remove success");
     });
     //存储最新的截图
-    chrome.storage.local.set({'croppingimg': dataURI}, function() {
+    chrome.storage.local.set({'croppingimg': dataURI,'canvaswidth':canvaswidth,'canvasheight':canvasheight}, function() {
         //打开新的页面 编辑图片
         chrome.tabs.create({'url': chrome.runtime.getURL('capture/capture.html')}, function(tab) {
             console.log("after created")
